@@ -1,8 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-const Post = require('./models/post')
 const mongoose = require('mongoose')
-
+const postRoutes = require("./routes/posts")
 const app = express();
 mongoose.connect("mongodb+srv://asadk1660:SADApani123@cluster0.x2zgvuh.mongodb.net/?retryWrites=true&w=majority")
 .then(() => {
@@ -19,74 +18,6 @@ app.use((req,res,next)=>{
     res.setHeader("Access-Control-Allow-Methods","GET, POST, PATCH, DELETE, OPTIONS,PUT ")
     next();
 }) 
-app.post('/api/posts',(req,res,next) => {
-  const post = new Post({
-    title: req.body.title,
-    content: req.body.content
-  });
-  post.save().then(result =>{
-    console.log(result)
-    return  res.status(201).json(
-        {
-            message:"Posts added Successfully!",
-            id:result._id
-    });
-  });
-  
- })
- app.put('/api/posts/:id',(req,res,next) => {
-    const post = new Post({
-      _id:req.body.id,
-      title: req.body.title,
-      content: req.body.content
-    });
-    Post.updateOne({_id:req.body.id},post).then(result =>{
-      return  res.status(200).json(
-          {
-              message:"Posts updated Successfully!",
-              id:result._id
-      });
-    });
-    
-   })
 
-app.get('/api/posts',(req,res,next) => {
-  Post.find()
-  .then(document =>{
-    return  res.status(200).json(
-        {
-            message:"Posts Fetched Successfully!",
-            posts:document
-    });
-  })
-
-})
-
-app.get('/api/posts/:id',(req,res,next) => {
-    Post.findById(req.params.id)
-    .then(post =>{
-      if(post){
-        return  res.status(200).json(post);
-      }else{
-   return  res.status(404).json(
-          {
-              message:"Page not found!",
-      });
-      }
-   
-    })
-  
-  })
-app.delete("/api/posts/:id",(req,res,next) => {
-  
-   Post.deleteOne({_id:req.params.id}).then(result => {
-    return  res.status(200).json(
-        {
-            message:"deleted Successfully!",
-    
-        });
-   })
-   
-   })
-
+app.use("/api/posts",postRoutes);
 module.exports = app;
