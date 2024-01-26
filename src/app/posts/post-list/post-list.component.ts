@@ -23,6 +23,9 @@ constructor(public postsService :PostsService) {
       this.posts=posts;
     })
   }
+  onDelete(id:string){
+   this.postsService.deletePost(id);
+  }
   ngOnDestroy(): void {
     this.postsSub.unsubscribe();
   }

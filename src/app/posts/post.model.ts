@@ -1,6 +1,6 @@
 export interface Post
 {
-  id:Number;
+  id:string;
   title:string;
   content:string;
 }
