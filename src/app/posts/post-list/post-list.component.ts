@@ -27,7 +27,7 @@ constructor(public postsService :PostsService) {
    this.postsService.deletePost(id);
   }
   ngOnDestroy(): void {
-    this.postsSub.unsubscribe();
+    // this.postsSub.unsubscribe();
   }
  
 }
