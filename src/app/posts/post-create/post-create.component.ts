@@ -12,6 +12,7 @@ export class PostCreateComponent implements OnInit {
   // @Output() postCreated = new EventEmitter<Post>();
   private mode = 'create'
   private id: string;
+  isloading = false;
    post:Post
   constructor(public postsService :PostsService, public route:ActivatedRoute) {
   
@@ -21,7 +22,9 @@ export class PostCreateComponent implements OnInit {
       if(paramMap.has('id')){
         this.mode = 'edit'
         this.id=paramMap.get('id');
+        this.isloading=true;
      this.postsService.getPost(this.id).subscribe(postData => {
+      this.isloading = false;
       this.post = {id:postData._id,title:postData.title,content:postData.content}
      });
       }

@@ -14,6 +14,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import { HeaderComponent } from './header/header.component';
 import { PostListComponent } from './posts/post-list/post-list.component';
 import { FormsModule } from '@angular/forms';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,7 +33,9 @@ import { FormsModule } from '@angular/forms';
     MatCardModule,
     MatToolbarModule,
     MatExpansionModule,
-    HttpClientModule],
+    MatProgressSpinnerModule,
+    HttpClientModule,
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })
