@@ -1,6 +1,16 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const Post = require('./models/post')
+const mongoose = require('mongoose')
+
 const app = express();
+mongoose.connect("mongodb+srv://asadk1660:SADApani123@cluster0.x2zgvuh.mongodb.net/?retryWrites=true&w=majority")
+.then(() => {
+    console.log('Connected to database!')
+})
+.catch(() => {
+    console.log('Connection failed!')
+})
 app.use(bodyParser.json());
 
 app.use((req,res,next)=>{
@@ -10,7 +20,11 @@ app.use((req,res,next)=>{
     next();
 }) 
 app.post('/api/posts',(req,res,next) => {
- 
+  const post = new Post({
+    title: req.body.title,
+    content: req.body.content
+  });
+  post.save();
   return  res.status(201).json(
      {
          message:"Posts added Successfully!",
@@ -18,23 +32,16 @@ app.post('/api/posts',(req,res,next) => {
  })
 
 app.get('/api/posts',(req,res,next) => {
-   const posts = [
-    {
-        id: "fasd213123",
-        title: "First server side response",
-        content: "This is coming from the server"
-    },
-    {
-        id: "fasd2sada13123",
-        title: "Second server side response",
-        content: "This is coming from the server"
-    }
-   ]
- return  res.status(200).json(
-    {
-        message:"Posts Fetched Successfully!",
-        posts:posts
-});
+  Post.find()
+  .then(document =>{
+    console.log(document);
+    return  res.status(200).json(
+        {
+            message:"Posts Fetched Successfully!",
+            posts:document
+    });
+  })
+
 })
 
 module.exports = app;
