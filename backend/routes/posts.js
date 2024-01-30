@@ -34,14 +34,17 @@ router.post('',multer({storage:storage}).single("image"),(req,res,next) => {
     const post = new Post({
       title: req.body.title,
       content: req.body.content,
-      imagePath:url + "./images" + req.file.name
+      imagePath:url + "/images/" + req.file.filename
     });
     post.save().then(result =>{
       console.log(result)
       return  res.status(201).json(
           {
               message:"Posts added Successfully!",
+            post:{
+              ...result,
               id:result._id
+            }
       });
     });
     
@@ -56,11 +59,7 @@ router.post('',multer({storage:storage}).single("image"),(req,res,next) => {
         return  res.status(200).json(
             {
                 message:"Posts updated Successfully!",
-                
-                post: {
-                  ...result,
-                  id:result._id,
-                }
+                id:result._id
         });
       });
       
