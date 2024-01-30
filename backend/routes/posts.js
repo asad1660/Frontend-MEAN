@@ -2,11 +2,39 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const Post = require('../models/post')
 const mongoose = require('mongoose')
+const multer = require('multer')
+
 const router = express.Router();
-router.post('',(req,res,next) => {
+
+const MIME_TYPE_MAP = {
+  'image/png': 'png',
+  'image/jpeg': 'jpg',
+  'image/jpg':'jpg'
+}
+
+const storage =  multer.diskStorage({
+  destination:(req,file,cb)=> {
+    const isValid = MIME_TYPE_MAP[file.mimetype];
+    let error = new Error("Inavlid mime type")
+    if(isValid){
+     error = null;
+    }
+  cb(error,"backend/images");
+  },
+  filename:(req,file,cb) =>{
+    const name = file.originalname.toLocaleLowerCase().split(' ').join('-');
+    const ext = MIME_TYPE_MAP[file.mimetype];
+    console.log(ext)
+    cb(null,name + '-' + Date.now() + '.' + ext);
+  }
+})
+
+router.post('',multer({storage:storage}).single("image"),(req,res,next) => {
+  const url = req.protocol + '://' + req.get("host");
     const post = new Post({
       title: req.body.title,
-      content: req.body.content
+      content: req.body.content,
+      imagePath:url + "./images" + req.file.name
     });
     post.save().then(result =>{
       console.log(result)
@@ -28,7 +56,11 @@ router.post('',(req,res,next) => {
         return  res.status(200).json(
             {
                 message:"Posts updated Successfully!",
-                id:result._id
+                
+                post: {
+                  ...result,
+                  id:result._id,
+                }
         });
       });
       
