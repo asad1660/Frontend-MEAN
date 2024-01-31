@@ -1,7 +1,5 @@
 const express = require('express')
-const bodyParser = require('body-parser')
 const Post = require('../models/post')
-const mongoose = require('mongoose')
 const multer = require('multer')
 
 const router = express.Router();
@@ -83,7 +81,7 @@ router.post('',multer({storage:storage}).single("image"),(req,res,next) => {
     }
     postQuery.then(documents =>{
       fetchedPosts=documents;
-      return Post.countDocuments();
+      return Post.count();
     })
     .then(count =>{
       return  res.status(200).json(
