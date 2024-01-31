@@ -10,9 +10,12 @@ import { AuthService } from '../auth.service';
 export class LoginComponent {
   isloading = false;
   constructor(public authService: AuthService) { }
+
   onLogin(form:NgForm){
-    console.log(form.value)
+     console.log(form.value)
     if(form.invalid) return;
-    this.authService.createUser(form.value.email,form.value.password);
+    this.authService.login(form.value.email,form.value.password);
+
   }
+
 }
